@@ -1,3 +1,7 @@
+/*------------------------------------------------------------------------------ D X    B A L L ----------------------------------------------------------------------------- */
+
+/*-------------------------------------------------------------------- M A H I R 	L A B I B 	 D I H A N ------------------------------------------------------------------ */
+
 # include "iGraphics.h"
 
 
@@ -10,14 +14,7 @@
 	#define BlockHeight 30
 	#define BlockWidth 70
 	#define Ball_Board 5
-	#define Mode_GameOver 9
-	#define Mode_Win 20
-	#define BulletSpeed 16
-	#define BoardWidth 150
 	#define WallY 350
-	#define BallSpeedY 5
-	#define BallRadius 10
-	#define MaxLevel 13
 	#define Death_Mode 1
 	#define Gun_Mode 2
 	#define Life_Mode 3
@@ -106,50 +103,21 @@
 
 /*----------------------------------------------------------------------------- S T R U C T U R E -----------------------------------------------------------------------------*/
 
-	struct
-	{
-
-		int Table[ScreenHeight + 1][ScreenWidth + 1];
-	}Bullet;
-	struct
-	{
-		char Image[14][40]=
-		{
-			"Data\\Image\\DropItems\\Death.bmp",
-			"Data\\Image\\DropItems\\Gun.bmp",
-			"Data\\Image\\DropItems\\Life+1.bmp",
-			"Data\\Image\\DropItems\\Extend.bmp",
-			"Data\\Image\\DropItems\\Shrink.bmp",
-			"Data\\Image\\DropItems\\Fast.bmp",
-			"Data\\Image\\DropItems\\Slow.bmp",
-			"Data\\Image\\DropItems\\Level+1.bmp",
-			"Data\\Image\\DropItems\\Fall.bmp",
-			"Data\\Image\\DropItems\\Grab.bmp",
-			"Data\\Image\\DropItems\\Fire.bmp",
-			"Data\\Image\\DropItems\\Big.bmp",
-			"Data\\Image\\DropItems\\Small.bmp",
-			"Data\\Image\\DropItems\\SuperShrink.bmp"
-		};
-		int Table[ScreenHeight + 1][ScreenWidth + 1];
-	}DropItems;
+	
 	struct
 	{
 		int X, Y;
 		int Strength, Type;
 	} Block[TotalR][TotalC];
-	typedef struct
-	{
-		char Name[40];
-		int Score;
-	} ScoreSheet;
+	
 	struct
 	{
-		int X, Y = 10, Height = 20, Width = BoardWidth;
+		int X, Y = 10, Height = 20,WIDTH=150,Width = WIDTH;
 		int SpeedX = 25, Gun = 0, Grab = 0;
 	} Board;
 	struct
 	{
-		int Radius = BallRadius, dirX, dirY, SpeedX = 2, SpeedY = 5,Fire=0;
+		int RADIUS=10,Radius=RADIUS, dirX, dirY, SpeedX = 2,SPEEDY=5,SpeedY = 5,Fire=0;
 		double X = Board.Y + Board.Width / 2, Y = Board.Y + Board.Height + Radius + Ball_Board;
 	} Ball;
 	struct
@@ -157,16 +125,14 @@
 		int Launch , Life , Score;
 		int Remaining, Pause , Level , Time = 0;
 	} GameState;
-	struct
-	{
-		int X = 30, Y = 20, Height = 100, Width = 148, Active = 0;
-		char Image[30] = "Data\\Image\\BackButton.bmp", ImageDark[30] = "Data\\Image\\BackButtonDark.bmp";
-	} Back;
+	
 	struct
 	{
 		int X = 261, Y = WallY;
 		int Height = TotalR * BlockHeight, Width = TotalC * BlockWidth;
 	} Wall;
+	
+
 	struct
 	{
 		int New, Custom, Resume, HighScore, Help, Quit = 0, Mode = 0;
@@ -184,14 +150,8 @@
 			"Data\\Image\\QuitButton.bmp"
 		};
 	} Menu;
-	struct
-	{
-	} GameOver;
-	struct
-	{
-		char Level[10][30] = {"", "Data\\Levels\\level1.txt", "Data\\Levels\\level2.txt"};
-		int Mode = 11;
-	} Game;
+	
+	
 	struct
 	{
 		int Point = 7, Mode = 1;
@@ -226,6 +186,7 @@
 		int ButtonX2[8] = {560, 525, 510, 605, 655, 620, 635, 440};
 		int ButtonY2[8] = {705, 665, 640, 685, 645, 605, 670, 700};
 	} HighScore;
+	
 	struct
 	{
 		int Point = 3, Mode = 5;
@@ -244,14 +205,11 @@
 	} Quit;
 	struct
 	{
-		int X=460,Y=0,Mode=10,Active=0;
-		char ImageActive[40]="Data\\Image\\NameEntryActive1.bmp";
-		char ImageDeactive[40]="Data\\Image\\NameEntryDeactive1.bmp";
-		char Name[50] = "";
-	} NameEntry;
+		int Mode = 7;
+	} Game;
 	struct
 	{
-		int X = 460, Y = 0, Mode = 8;
+		int X = 460, Y = 0, Mode = 8,MAX=10;
 		char Image[30] = "Data\\Image\\LevelUp.bmp";
 		char Level[50][30] =
 		{
@@ -266,24 +224,32 @@
 			"Data\\Levels\\level_8.txt",
 			"Data\\Levels\\level_9.txt",
 			"Data\\Levels\\level_10.txt",
-			"Data\\Levels\\level_11.txt",
-			"Data\\Levels\\level_12.txt",
-			"Data\\Levels\\level_13.txt",
-			"Data\\Levels\\level_14.txt",
-			"Data\\Levels\\level_15.txt",
-			"Data\\Levels\\level_16.txt",
-			"Data\\Levels\\level_17.txt",
-			"Data\\Levels\\level_18.txt",
-			"Data\\Levels\\level_19.txt",
-			"Data\\Levels\\level_20.txt",
-			"Data\\Levels\\level_21.txt",
-			"Data\\Levels\\level_22.txt",
-			"Data\\Levels\\level_23.txt",
-			"Data\\Levels\\level_24.txt",
-			"Data\\Levels\\level_25.txt",
-			"Data\\Levels\\level_26.txt"
+			"Data\\Levels\\level_11.txt"
 		};
 	} LevelUp;
+	struct
+	{
+		int Mode=9;
+	} GameOver;
+	struct
+	{
+		int X=460,Y=0,Mode=10,Active=0;
+		char ImageActive[40]="Data\\Image\\NameEntryActive1.bmp";
+		char ImageDeactive[40]="Data\\Image\\NameEntryDeactive1.bmp";
+		char Name[50] = "";
+	} NameEntry;
+	struct 
+	{
+		int Mode=11;
+	}Win;
+	
+	
+	
+	typedef struct
+	{
+		char Name[40];
+		int Score;
+	} ScoreSheet;
 	struct
 	{
 		int X, Y, Click;
@@ -302,10 +268,39 @@
 		int Width=1;
 		int Height=5;
 		int Triangle_Height=1;
-	// #define Font.Width 1
-	// #define Font.Height 5
-	// #define Font.Triangle_Height 1
 	} Font;
+	struct
+	{
+
+		int Speed=16;
+		int Table[ScreenHeight + 1][ScreenWidth + 1];
+	}Bullet;
+	struct
+	{
+		char Image[14][40]=
+		{
+			"Data\\Image\\DropItems\\Death.bmp",
+			"Data\\Image\\DropItems\\Gun.bmp",
+			"Data\\Image\\DropItems\\Life+1.bmp",
+			"Data\\Image\\DropItems\\Extend.bmp",
+			"Data\\Image\\DropItems\\Shrink.bmp",
+			"Data\\Image\\DropItems\\Fast.bmp",
+			"Data\\Image\\DropItems\\Slow.bmp",
+			"Data\\Image\\DropItems\\Level+1.bmp",
+			"Data\\Image\\DropItems\\Fall.bmp",
+			"Data\\Image\\DropItems\\Grab.bmp",
+			"Data\\Image\\DropItems\\Fire.bmp",
+			"Data\\Image\\DropItems\\Big.bmp",
+			"Data\\Image\\DropItems\\Small.bmp",
+			"Data\\Image\\DropItems\\SuperShrink.bmp"
+		};
+		int Table[ScreenHeight + 1][ScreenWidth + 1];
+	}DropItems;
+	struct
+	{
+		int X = 30, Y = 20, Height = 100, Width = 148, Active = 0;
+		char Image[30] = "Data\\Image\\BackButton.bmp", ImageDark[30] = "Data\\Image\\BackButtonDark.bmp";
+	} Back;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -500,14 +495,14 @@
 		GameState.Life--;
 		if (GameState.Life == 0)
 		{
-			MODE = Mode_GameOver;
+			MODE = GameOver.Mode;
 			Sleep(500);
 		}
 		GameState.Launch = 0;
 	}
 	void iLevelUp()
 	{
-		if(GameState.Level<MaxLevel)
+		if(GameState.Level<LevelUp.MAX)
 		{
 			GameState.Launch = 0;
 			GameState.Score += 10 * GameState.Remaining;
@@ -516,12 +511,12 @@
 			Board.Gun = 0;
 			Board.Grab = 0;
 			Ball.Fire=0;
-			Ball.Radius=BallRadius;
+			Ball.Radius=Ball.RADIUS;
 			iResetBullet();
 			iResetPerks();
-			Board.Width = BoardWidth;
+			Board.Width = Board.WIDTH;
 			Wall.Y = WallY;
-			Ball.SpeedY = BallSpeedY;
+			Ball.SpeedY = Ball.SPEEDY;
 			Ball.X = Board.Y + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
 			GameState.Level++;
 			iSet();
@@ -531,7 +526,7 @@
 		else
 		{
 			GameState.Level++;
-			MODE=Mode_Win;
+			MODE=Win.Mode;
 		}
 	}
 	void iCatch()
@@ -565,7 +560,7 @@
 						DropItems.Table[i][j] = 0;
 						break;
 					case Extend_Mode:
-						if (BoardWidth + 30 <= ScreenWidth - 2 * Wall.X)
+						if (Board.WIDTH + 30 <= ScreenWidth - 2 * Wall.X)
 						{
 							Board.Width += 30;
 							if (Board.X - 15 > Wall.X)
@@ -610,11 +605,11 @@
 						DropItems.Table[i][j] = 0;
 						break;
 					case Big_Mode:
-						Ball.Radius=BallRadius+5;
+						Ball.Radius=Ball.RADIUS+5;
 						DropItems.Table[i][j] = 0;
 						break;
 					case Small_Mode:
-						Ball.Radius=BallRadius-5;
+						Ball.Radius=Ball.RADIUS-5;
 						DropItems.Table[i][j] = 0;
 						break;
 					case SuperShrink_Mode:
@@ -865,8 +860,6 @@
 			HorizontalSegment(x, y + Font.Height * size + 2 * Font.Triangle_Height * size, Font.Height * size, Font.Width * size, size);
 		if (digit == 0 || digit == 2 || digit == 3 || digit == 5 || digit == 6 || digit == 8 || digit == 9)
 			HorizontalSegment(x, y, Font.Height * size, Font.Width * size, size);
-
-
 		if (digit == 0 || digit == 1 || digit == 3 || digit == 4 || digit == 5 || digit == 6 || digit == 7 || digit == 8 || digit == 9)
 			VerticalSegment(x + Font.Height * size + 2 * Font.Triangle_Height * size, y, Font.Width * size, Font.Height * size, size);
 		if (digit == 0 || digit == 1 || digit == 2 || digit == 3 || digit == 4 || digit == 7 || digit == 8 || digit == 9)
@@ -964,7 +957,7 @@
 		}
 		for (int j = 0; j < ScreenWidth; j++)
 		{
-			for (int i = floor((ScreenHeight - Board.Y - Board.Height) / BulletSpeed) * BulletSpeed; i >= Board.Y + Board.Height; i--)
+			for (int i = floor((ScreenHeight - Board.Y - Board.Height) / Bullet.Speed) * Bullet.Speed; i >= Board.Y + Board.Height; i--)
 			{
 				if (Bullet.Table[i][j])
 				{
@@ -974,14 +967,14 @@
 						{
 							Bullet.Table[i][j] = 0;
 							iRemoveBlock((i - Wall.Y) / BlockHeight, (j - Wall.X) / BlockWidth);
-							// Collide = 0;
+							Collide = 0;
 						}
 						else
 						{
 							iDrawBullet(j, i);
 							if (!GameState.Pause)
 							{
-								Bullet.Table[i + BulletSpeed][j] = Bullet.Table[i][j];
+								Bullet.Table[i + Bullet.Speed][j] = Bullet.Table[i][j];
 								Bullet.Table[i][j] = 0;
 							}
 						}
@@ -992,7 +985,7 @@
 						iDrawBullet(j, i);
 						if (!GameState.Pause)
 						{
-							Bullet.Table[i + BulletSpeed][j] = Bullet.Table[i][j];
+							Bullet.Table[i + Bullet.Speed][j] = Bullet.Table[i][j];
 							Bullet.Table[i][j] = 0;
 						}
 					}
@@ -1043,7 +1036,7 @@
 	}
 	void iDrawNameEntry()
 	{
-		if(GameState.Level<=MaxLevel) 
+		if(GameState.Level<=LevelUp.MAX) 
 			{
 				iShowBMP(460, 100, "Data\\Image\\GameOver.bmp");
 				iSetColor(188, 57, 133);
@@ -1095,11 +1088,11 @@
 		{
 			iDrawQuit();
 		}
-		else if (MODE == Mode_GameOver)
+		else if (MODE == GameOver.Mode)
 		{
 			iDrawGameOver();
 		}
-		else if(MODE == Mode_Win)
+		else if(MODE == Win.Mode)
 		{
 			iDrawWin();
 		}
@@ -1242,7 +1235,7 @@
 	void iMouseLeftButtonDown(int mx, int my)
 	{
 		Mouse.Click = 0;
-		if (MODE == Mode_GameOver||MODE==Mode_Win)
+		if (MODE == GameOver.Mode||MODE==Win.Mode)
 		{
 			if (NameEntry.Active)
 			{
@@ -1340,7 +1333,7 @@
 			if (Board.X > Wall.X + TotalC * BlockWidth - Board.Width) { Board.X = Wall.X + TotalC * BlockWidth - Board.Width;}
 		}
 
-		else if (MODE == Mode_GameOver||MODE==Mode_Win)
+		else if (MODE == GameOver.Mode||MODE==Win.Mode)
 		{
 			if (mx >= NameEntry.X+280 && mx <= NameEntry.X+710 && my >= NameEntry.Y+130&& my <= NameEntry.Y+130+90)
 			{
@@ -1549,7 +1542,7 @@
 			iNameEntry(key);
 		}
 
-		if (key == 'q')
+		else if (key == 'q')
 		{
 			if (MODE == Game.Mode) iSaveState();
 			MODE = Quit.Mode;
@@ -1558,7 +1551,7 @@
 
 		else if (key == '\r')
 		{
-			if (MODE == Mode_GameOver)
+			if (MODE == GameOver.Mode)
 			{
 				MODE == Menu.Mode;
 			}
@@ -1701,7 +1694,7 @@
 	}
 	int iRightSideCollision(int i, int j)
 	{
-		if (Ball.X >= Wall.X + Block[i][j].X + BlockWidth && Ball.X <= Wall.X + Block[i][j].X + BlockWidth + (Ball.Radius>BallRadius?Ball.Radius:BallRadius))
+		if (Ball.X >= Wall.X + Block[i][j].X + BlockWidth && Ball.X <= Wall.X + Block[i][j].X + BlockWidth + (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS))
 		{
 			
 			iRemoveBlock(i, j);
@@ -1716,7 +1709,7 @@
 	}
 	int iLeftSideCollision(int i, int j)
 	{
-		if (Ball.X >= Wall.X + Block[i][j].X - (Ball.Radius>BallRadius?Ball.Radius:BallRadius) && Ball.X <= Wall.X + Block[i][j].X)
+		if (Ball.X >= Wall.X + Block[i][j].X - (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS) && Ball.X <= Wall.X + Block[i][j].X)
 		{
 			
 			iRemoveBlock(i, j);
@@ -1731,7 +1724,7 @@
 	}
 	int iTopSideCollision(int i, int j)
 	{
-		if (Ball.Y >= Wall.Y + Block[i][j].Y + BlockHeight && Ball.Y <= Wall.Y + Block[i][j].Y + BlockHeight + (Ball.Radius>BallRadius?Ball.Radius:BallRadius))
+		if (Ball.Y >= Wall.Y + Block[i][j].Y + BlockHeight && Ball.Y <= Wall.Y + Block[i][j].Y + BlockHeight + (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS))
 		{
 			
 			iRemoveBlock(i, j);
@@ -1747,7 +1740,7 @@
 	}
 	int iBottomSideCollision(int i, int j)
 	{
-		if (Ball.Y >= Wall.Y + Block[i][j].Y - (Ball.Radius>BallRadius?Ball.Radius:BallRadius) && Ball.Y <= Wall.Y + Block[i][j].Y)
+		if (Ball.Y >= Wall.Y + Block[i][j].Y - (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS) && Ball.Y <= Wall.Y + Block[i][j].Y)
 		{
 			
 			iRemoveBlock(i, j);
@@ -1763,7 +1756,7 @@
 	}
 	int iTopRightCornerCollision(int i, int j)
 	{
-		if (Ball.Y >= Wall.Y + Block[i][j].Y + BlockHeight && Ball.Y <= Wall.Y + Block[i][j].Y + BlockHeight + (Ball.Radius>BallRadius?Ball.Radius:BallRadius))
+		if (Ball.Y >= Wall.Y + Block[i][j].Y + BlockHeight && Ball.Y <= Wall.Y + Block[i][j].Y + BlockHeight + (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS))
 		{
 			
 			iRemoveBlock(i, j);
@@ -1781,7 +1774,7 @@
 	}
 	int iBottomRightCornerCollision(int i, int j)
 	{
-		if (Ball.Y >= Wall.Y + Block[i][j].Y - (Ball.Radius>BallRadius?Ball.Radius:BallRadius) && Wall.Y + Ball.Y <= Block[i][j].Y)
+		if (Ball.Y >= Wall.Y + Block[i][j].Y - (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS) && Wall.Y + Ball.Y <= Block[i][j].Y)
 		{
 			
 			iRemoveBlock(i, j);
@@ -1799,7 +1792,7 @@
 	}
 	int iTopLeftCornerCollision(int i, int j)
 	{
-		if (Ball.Y >= Wall.Y + Block[i][j].Y + BlockHeight && Ball.Y <= Wall.Y + Block[i][j].Y + BlockHeight + (Ball.Radius>BallRadius?Ball.Radius:BallRadius))
+		if (Ball.Y >= Wall.Y + Block[i][j].Y + BlockHeight && Ball.Y <= Wall.Y + Block[i][j].Y + BlockHeight + (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS))
 		{
 			
 			iRemoveBlock(i, j);
@@ -1817,7 +1810,7 @@
 	}
 	int iBottomLeftCornerCollision(int i, int j)
 	{
-		if (Ball.Y >= Wall.Y + Block[i][j].Y - (Ball.Radius>BallRadius?Ball.Radius:BallRadius) && Ball.Y <= Wall.Y + Block[i][j].Y)
+		if (Ball.Y >= Wall.Y + Block[i][j].Y - (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS) && Ball.Y <= Wall.Y + Block[i][j].Y)
 		{
 			
 			iRemoveBlock(i, j);
@@ -1854,13 +1847,13 @@
 							if (iRightSideCollision(i, j))continue;
 						}
 
-						if (Ball.X >= Wall.X + Block[i][j].X - (Ball.Radius>BallRadius?Ball.Radius:BallRadius) && Ball.X <= Wall.X + Block[i][j].X)
+						if (Ball.X >= Wall.X + Block[i][j].X - (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS) && Ball.X <= Wall.X + Block[i][j].X)
 						{
 							if (iBottomLeftCornerCollision(i, j))continue;
 							if (iTopLeftCornerCollision(i, j))continue;
 						}
 
-						if (Ball.X >= Wall.X + Block[i][j].X + BlockWidth && Ball.X <= Wall.X + Block[i][j].X + BlockWidth + (Ball.Radius>BallRadius?Ball.Radius:BallRadius))
+						if (Ball.X >= Wall.X + Block[i][j].X + BlockWidth && Ball.X <= Wall.X + Block[i][j].X + BlockWidth + (Ball.Radius>Ball.RADIUS?Ball.Radius:Ball.RADIUS))
 						{
 							if (iBottomRightCornerCollision(i, j))continue;
 							if (iTopRightCornerCollision(i, j))continue;
