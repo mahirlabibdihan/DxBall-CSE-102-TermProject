@@ -112,13 +112,13 @@
 	
 	struct
 	{
-		int X, Y = 10, Height = 20,WIDTH=150,Width = WIDTH;
+		int X=ScreenWidth/2, Y = 10,LastX,Height = 20,WIDTH=150,Width = WIDTH;
 		int SpeedX = 25, Gun = 0, Grab = 0;
 	} Board;
 	struct
 	{
-		int RADIUS=10,Radius=RADIUS, dirX, dirY, SpeedX = 2,SPEEDY=5,SpeedY = 5,Fire=0;
-		double X = Board.Y + Board.Width / 2, Y = Board.Y + Board.Height + Radius + Ball_Board;
+		int RADIUS=10,Radius=RADIUS, dirX, dirY, SpeedX = 2,SpeedY = 5,Fire=0;
+		double X = Board.X + Board.Width / 2, Y = Board.Y + Board.Height + Radius + Ball_Board;
 	} Ball;
 	struct
 	{
@@ -214,17 +214,16 @@
 		char Level[50][30] =
 		{
 			"",
-			"Data\\Levels\\level_1.txt",
-			"Data\\Levels\\level_2.txt",
-			"Data\\Levels\\level_3.txt",
-			"Data\\Levels\\level_4.txt",
-			"Data\\Levels\\level_5.txt",
-			"Data\\Levels\\level_6.txt",
-			"Data\\Levels\\level_7.txt",
-			"Data\\Levels\\level_8.txt",
-			"Data\\Levels\\level_9.txt",
-			"Data\\Levels\\level_10.txt",
-			"Data\\Levels\\level_11.txt"
+			"Data\\Levels\\level1.txt",
+			"Data\\Levels\\level2.txt",
+			"Data\\Levels\\level3.txt",
+			"Data\\Levels\\level4.txt",
+			"Data\\Levels\\level5.txt",
+			"Data\\Levels\\level6.txt",
+			"Data\\Levels\\level7.txt",
+			"Data\\Levels\\level8.txt",
+			"Data\\Levels\\level9.txt",
+			"Data\\Levels\\level10.txt"
 		};
 	} LevelUp;
 	struct
@@ -248,11 +247,11 @@
 	typedef struct
 	{
 		char Name[40];
-		int Score;
+		int Score,Time;
 	} ScoreSheet;
 	struct
 	{
-		int X, Y, Click;
+		int X = ScreenWidth/2, Y = ScreenHeight/2, LastX, LastY, Click;
 		char Image[30] = "Data\\Image\\Mouse1.bmp";
 	} Mouse;
 	struct
@@ -313,7 +312,7 @@
 
 	int Collide = 0;
 	int MODE;
-	int level = 13;
+	int level = 10;
 	int main()
 	{
 		MODE = Menu.Mode;
@@ -381,7 +380,7 @@
 		Ball.Fire=0;
 		iResetBullet();
 		iResetPerks();
-		Ball.X = Board.Y + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
+		Ball.X = Board.X + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
 		int i, j;
 		for (i = TotalC - 1; i > -1; i--)
 		{
@@ -417,7 +416,9 @@
 			}
 		}
 		fclose(fp);
-		Ball.X = Board.Y + Board.Width / 2;
+		
+		Board.X=Board.LastX=Mouse.X-Board.Width/2;
+		Ball.X = Board.X + Board.Width / 2;
 		Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board;
 		Ball.dirX = 0;
 		Ball.dirY = 0;
@@ -444,7 +445,7 @@
 				fscanf(load,"%d %d",&Bullet.Table[i][j],&DropItems.Table[i][j]);
 			}
 		}
-		fscanf(load, "%d %lf %lf %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n", &Board.X, &Ball.X, &Ball.Y, &Ball.dirX, &Ball.dirY,&Ball.Radius,&Ball.Fire, &GameState.Life, &GameState.Launch, &GameState.Score, &GameState.Remaining, &Board.Width, &GameState.Level, &Ball.SpeedY, &Board.Gun,&Board.Grab,&Wall.Y, &GameState.Pause,&GameState.Time);
+		fscanf(load, "%d %lf %lf %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n", &Board.X, &Ball.X, &Ball.Y, &Ball.dirX, &Ball.dirY,&Ball.Radius,&Ball.Fire, &GameState.Life, &GameState.Launch, &GameState.Score, &GameState.Remaining, &Board.Width, &GameState.Level, &Board.LastX, &Board.Gun,&Board.Grab,&Wall.Y, &GameState.Pause,&GameState.Time);
 		fclose(load);
 	}
 	void iSaveState()
@@ -467,30 +468,13 @@
 			}
 			fprintf(save, "\n") ;
 		}
-		printf("%d\n",GameState.Time);
-		fprintf(save, "%d %lf %lf %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n", Board.X, Ball.X, Ball.Y, Ball.dirX, Ball.dirY, Ball.Radius, Ball.Fire,GameState.Life, GameState.Launch, GameState.Score, GameState.Remaining, Board.Width, GameState.Level, Ball.SpeedY, Board.Gun, Board.Grab,Wall.Y, GameState.Pause,GameState.Time);
+		fprintf(save, "%d %lf %lf %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n", Board.X, Ball.X, Ball.Y, Ball.dirX, Ball.dirY, Ball.Radius, Ball.Fire,GameState.Life, GameState.Launch, GameState.Score, GameState.Remaining, Board.Width, GameState.Level, Board.LastX, Board.Gun, Board.Grab,Wall.Y, GameState.Pause,GameState.Time);
 		fclose(save);
 	}
-	void iDirection()
-	{
-		if (Ball.X >= Board.X && Ball.X <= Board.X + Board.Width)
-		{
-			if (Board.Grab)
-			{
-				Ball.dirY = 0;
-				Ball.dirX = 0;
-			}
-			else
-			{
-				PlaySoundA("Data\\Music\\BallBoardCollision.wav", NULL, SND_ASYNC);
-				Ball.dirX = ceil((Ball.X - Board.X - Board.Width / 2) * Ball.SpeedX * 9 / Board.Width);
-				Ball.dirY *= -1;
-			}
-		}
-	}
+
 	void iDeath()
 	{
-		Ball.X = Board.Y + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
+		Ball.X = Board.X + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
 		PlaySound("Data\\Music\\Gameover.wav", NULL, SND_ASYNC);
 		GameState.Life--;
 		if (GameState.Life == 0)
@@ -516,7 +500,8 @@
 			iResetPerks();
 			Board.Width = Board.WIDTH;
 			Wall.Y = WallY;
-			Ball.SpeedY = Ball.SPEEDY;
+			Ball.SpeedY = 5;
+			Board.X=Board.LastX=Mouse.X-Board.Width/2;
 			Ball.X = Board.Y + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
 			GameState.Level++;
 			iSet();
@@ -547,75 +532,77 @@
 
 					switch (DropItems.Table[i][j])
 					{
-					case Death_Mode:
-						iDeath();
-						DropItems.Table[i][j] = 0;
-						break;
-					case Gun_Mode:
-						Board.Gun = 1;
-						DropItems.Table[i][j] = 0;
-						break;
-					case Life_Mode:
-						GameState.Life++;
-						DropItems.Table[i][j] = 0;
-						break;
-					case Extend_Mode:
-						if (Board.WIDTH + 30 <= ScreenWidth - 2 * Wall.X)
-						{
-							Board.Width += 30;
-							if (Board.X - 15 > Wall.X)
-								Board.X -= 15;
-						}
-						DropItems.Table[i][j] = 0;
-						break;
-					case Shrink_Mode:
-						if (Board.Width - 30 >= 30)
-						{
-							Board.Width -= 30;
-							Board.X += 15;
-						}
-						DropItems.Table[i][j] = 0;
-						break;
-					case Fast_Mode:
-						if(abs(Ball.dirY)<13)
-						Ball.dirY += (Ball.dirY > 0) ? 3 : -3;
-						Ball.dirX += (Ball.dirX > 0) ? 1 : -1;
+						case Death_Mode:
+							iDeath();
+							DropItems.Table[i][j] = 0;
+							break;
+						case Gun_Mode:
+							Board.Gun = 1;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Life_Mode:
+							GameState.Life++;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Extend_Mode:
+							if (Board.WIDTH + 30 <= ScreenWidth - 2 * Wall.X)
+							{
+								Board.Width += 30;
+								if (Board.X - 15 > Wall.X)
+									Board.X -= 15;
+							}
+							DropItems.Table[i][j] = 0;
+							break;
+						case Shrink_Mode:
+							if (Board.Width - 30 >= 30)
+							{
+								Board.Width -= 30;
+								Board.X += 15;
+							}
+							DropItems.Table[i][j] = 0;
+							break;
+						case Fast_Mode:
+							if (abs(Ball.dirY) < 13)
+								Ball.dirY *= 1.2;
+							Ball.dirX *= 1.2;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Slow_Mode:
+							Ball.dirY *= 0.8;
+							Ball.dirX *= 0.8;
+							DropItems.Table[i][j] = 0;
+							break;
+						case LevelUp_Mode:
+							if (GameState.Level<LevelUp.MAX&&GameState.Level>0) MODE = LevelUp.Mode;
+							else if(GameState.Level==LevelUp.MAX) iLevelUp();
+							else Custom.Win = 1;
 
-						DropItems.Table[i][j] = 0;
-						break;
-					case Slow_Mode:
-						Ball.dirY -= (Ball.dirY > 0) ? 3 : -3;
-						Ball.dirX -= (Ball.dirX > 0) ? 1 : -1;
-						DropItems.Table[i][j] = 0;
-						break;
-					case LevelUp_Mode:
-						MODE = LevelUp.Mode;
-						DropItems.Table[i][j] = 0;
-						break;
-					case Fall_Mode:
-						Wall.Y -= BlockHeight;
-						DropItems.Table[i][j] = 0;
-						break;
-					case Grab_Mode:
-						Board.Grab = 1;
-						DropItems.Table[i][j] = 0;
-						break;
-					case Fire_Mode:
-						Ball.Fire=1;
-						DropItems.Table[i][j] = 0;
-						break;
-					case Big_Mode:
-						Ball.Radius=Ball.RADIUS+5;
-						DropItems.Table[i][j] = 0;
-						break;
-					case Small_Mode:
-						Ball.Radius=Ball.RADIUS-5;
-						DropItems.Table[i][j] = 0;
-						break;
-					case SuperShrink_Mode:
-						Board.Width=30;
-						DropItems.Table[i][j] = 0;
-						break;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Fall_Mode:
+							Wall.Y -= BlockHeight;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Grab_Mode:
+							Board.Grab = 1;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Fire_Mode:
+							Ball.Fire = 1;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Big_Mode:
+							Ball.Radius = Ball.RADIUS * 1.5;
+							DropItems.Table[i][j] = 0;
+							break;
+						case Small_Mode:
+							Ball.Radius = Ball.RADIUS * 0.5;
+							DropItems.Table[i][j] = 0;
+							break;
+						case SuperShrink_Mode:
+							Board.Width = 30;
+							DropItems.Table[i][j] = 0;
+							break;
 					}
 				}
 			}
@@ -628,9 +615,20 @@
 		{
 			iCollision();
 			iCatch();
-			Ball.X += Ball.dirX;
-			Ball.Y += Ball.dirY;	
-			if (Ball.dirY < 0 & Ball.Y >= Board.Y + Board.Height / 2 - Ball.Radius & Ball.Y <= Board.Y + Board.Height + Ball.Radius + Ball_Board)
+			if(GameState.Launch)
+			{
+				Ball.X += Ball.dirX;
+				Ball.Y += Ball.dirY;
+			}
+			else 
+			{
+				Ball.X=Board.X+Ball.X-Board.LastX;			
+				Board.LastX=Board.X;
+				if(Ball.X<Board.X) Ball.X=Board.X;
+				else if(Ball.X>Board.X+Board.Width) Ball.X=Board.X+Board.Width;
+			}
+							
+			if (Ball.dirY < 0 & Ball.Y >= Board.Y + Board.Height / 2 - Ball.Radius & Ball.Y <= Board.Y + Board.Height + Ball.Radius + Ball_Board )
 			{
 				iDirection();
 			}
@@ -650,7 +648,8 @@
 			}
 			else if (GameState.Remaining == 0)
 			{
-				if (GameState.Level) MODE = LevelUp.Mode;
+				if (GameState.Level<LevelUp.MAX&&GameState.Level>0) MODE = LevelUp.Mode;
+				else if(GameState.Level==LevelUp.MAX) iLevelUp();
 				else Custom.Win = 1;
 			}
 		}
@@ -660,11 +659,34 @@
 			iLevelUp();
 		}
 	}
+	void iDirection()
+	{
+		if (Ball.X >= Board.X && Ball.X <= Board.X + Board.Width)
+		{
+			PlaySoundA("Data\\Music\\BallBoardCollision.wav", NULL, SND_ASYNC);
+			if(Ball.X!=Board.X + Board.Width / 2) Ball.dirX = ceil((Ball.X - Board.X - Board.Width / 2) * Ball.SpeedX * 9 / Board.Width);
+			if(!Ball.dirX) Ball.dirX=rand()%9;
+			Ball.dirY =abs(Ball.dirY);
+			if(!Ball.dirY) Ball.dirY = 2*Ball.SpeedY;			
+			if(GameState.Launch&&Board.Grab)
+			{ 
+				GameState.Launch=0;
+				Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board;
+			}
+			else 
+			{
+				GameState.Launch=1;
+			}
+		}
+	}
 	int Compare(const void* a, const void* b)
 	{
 		int A = ((ScoreSheet*)a)->Score;
 		int B = ((ScoreSheet*)b)->Score;
-		return B - A;
+		if(B!=A) return B - A;
+		A = ((ScoreSheet*)a)->Time;
+		B = ((ScoreSheet*)b)->Time;
+		return A - B ;
 	}
 
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -674,7 +696,7 @@
 
 
 
-/*----------------------------------------------------------------------------- D R A W I N G S --------------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------ D R A W I N G S -------------------------------------------------------------------------------*/
 
 	void iDrawBall(int x, int y)
 	{
@@ -696,22 +718,24 @@
 	void iDrawHighScore()
 	{
 		FILE *hs;
-		char name[40], S[10];
+		char name[40], S[10],T[10];
 		int i;
 		hs = fopen("Data\\HighScore.txt", "r");
 		iShowBMP2(460, 400, "Data\\Image\\HighScoreWall.bmp", 0X00060412);
 		iSetColor(166, 41, 166);
-		iText(700, 550, "POS", GLUT_BITMAP_TIMES_ROMAN_24);
-		iText(770, 550, "NAME", GLUT_BITMAP_TIMES_ROMAN_24);
-		iText(1160, 550 , "SCORE", GLUT_BITMAP_TIMES_ROMAN_24);
+		iText(600, 550, "POS", GLUT_BITMAP_TIMES_ROMAN_24);
+		iText(670, 550, "NAME", GLUT_BITMAP_TIMES_ROMAN_24);
+		iText(1100, 550 , "TIME (sec)", GLUT_BITMAP_TIMES_ROMAN_24);
+		iText(1260, 550 , "SCORE", GLUT_BITMAP_TIMES_ROMAN_24);
 		iSetColor(255, 255, 255);
-		for (i = 0; EOF != fscanf(hs, "%[^\n] %s\n", name, S) ; i++)
+		for (i = 0; EOF != fscanf(hs, "%[^\n] %s %s\n", name,S,T) ; i++)
 		{
 			{
 				char Temp[3];
-				iText(700, 500 - 40 * i, itoa(i + 1, Temp, 10), GLUT_BITMAP_TIMES_ROMAN_24);
-				iText(770, 500 - 40 * i, name, GLUT_BITMAP_TIMES_ROMAN_24);
-				iText(1160, 500 - 40 * i, S, GLUT_BITMAP_TIMES_ROMAN_24);
+				iText(600, 500 - 40 * i, itoa(i + 1, Temp, 10), GLUT_BITMAP_TIMES_ROMAN_24);
+				iText(670, 500 - 40 * i, name, GLUT_BITMAP_TIMES_ROMAN_24);
+				iText(1100, 500 - 40 * i, T, GLUT_BITMAP_TIMES_ROMAN_24);
+				iText(1260, 500 - 40 * i, S, GLUT_BITMAP_TIMES_ROMAN_24);
 			}
 		}
 		fclose(hs);
@@ -932,8 +956,7 @@
 				iDrawBlock(i * BlockWidth - 19, j * BlockHeight - 10, 8, 8, 8);
 			}
 		}
-		iSetColor(255, 255, 255);
-		if (!GameState.Launch || Ball.dirY == 0) Ball.X = Board.X + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board;
+		iSetColor(255, 255, 255); 
 		iDrawBoard(Board.X, Board.Y);
 		iSetColor(180, 180, 180);
 		if (GameState.Life)iDrawBall(Ball.X, Ball.Y);
@@ -1123,6 +1146,7 @@
 
 	void iMouseMove(int mx, int my)
 	{
+		
 		Mouse.X = mx, Mouse.Y = my;
 		if (MODE == Custom.Mode)
 		{
@@ -1137,7 +1161,6 @@
 						{
 							if (!Block[i][j].Strength && Mouse.Click == 0)
 							{
-								// if(!Block[i][j].Strength)PlaySound("Data\\Music\\Button.wav", NULL, SND_ASYNC);
 								Block[i][j].Strength = 1;
 
 								GameState.Remaining++;
@@ -1248,11 +1271,9 @@
 		}
 		else if (MODE == Game.Mode)
 		{
-			if (!GameState.Launch || Ball.dirY == 0)
+			if (!GameState.Launch)
 			{
-				GameState.Launch = 1;
-				Ball.dirY = 2 * Ball.SpeedY;
-				Ball.dirX = -2 * Ball.SpeedX;
+				iDirection();
 			}
 			else if (Board.Gun)
 			{
@@ -1323,12 +1344,15 @@
 	}
 	void iMouseOver(int mx, int my)
 	{
-
+		// printf("%d %d\n",Mouse.X,Mouse.Y);
+		Mouse.LastX=Mouse.X, Mouse.LastY=Mouse.Y;
 		Mouse.X = mx, Mouse.Y = my;
 		if (MODE == Game.Mode)
 		{
 			if (GameState.Pause) return;
-			Board.X = mx - (Board.Width / 2);
+			// printf("%d %d\n",Board.X,Board.LastX);
+			Board.LastX=Board.X;
+			Board.X = Mouse.X;
 			if (Board.X < Wall.X) { Board.X = Wall.X; }
 			if (Board.X > Wall.X + TotalC * BlockWidth - Board.Width) { Board.X = Wall.X + TotalC * BlockWidth - Board.Width;}
 		}
@@ -1499,19 +1523,20 @@
 			ScoreSheet HS[11];
 			hs = fopen("Data\\HighScore.txt", "r");
 
-			for (i = 0; EOF != fscanf(hs, "%[^\n] %d\n", HS[i].Name, &HS[i].Score) && i < 10; i++);
+			for (i = 0; EOF != fscanf(hs, "%[^\n] %d %d\n", HS[i].Name, &HS[i].Score,&HS[i].Time) && i < 10; i++);
 			fclose(hs);
 			hs = fopen("Data\\HighScore.txt", "w");
 
 			strcpy(HS[i].Name, NameEntry.Name);
 
 			HS[i].Score = GameState.Score;
+			HS[i].Time= GameState.Time;
 
 			qsort(HS, i + 1, sizeof(ScoreSheet), Compare);
 
 			for (j = 0; j <= i && j < 10; j++)
 			{
-				fprintf(hs, "%s\n%d\n", HS[j].Name, HS[j].Score);
+				fprintf(hs, "%s\n%d\n%d\n", HS[j].Name, HS[j].Score,HS[j].Time);
 			}
 
 			fclose(hs);
@@ -1648,7 +1673,7 @@
 
 
 
-/*------------------------------------------------------------------------ B L O C K 	C O L L I S I O N ----------------------------------------------------------------------*/
+/*----------------------------------------------------------------------- B L O C K 	C O L L I S I O N ----------------------------------------------------------------------*/
 
 	void iRemoveBlock(int i, int j)
 	{
