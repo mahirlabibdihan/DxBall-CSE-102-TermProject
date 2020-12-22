@@ -146,7 +146,7 @@
 	} Board;
 	struct
 	{
-		int RADIUS=10,Radius=RADIUS, SPEEDX=2,SPEEDY=5,Fire=0;
+		int RADIUS=10,Radius=RADIUS, SPEEDX=3,SPEEDY=8,Fire=0;
 		double X = Board.X + Board.Width / 2, Y = Board.Y + Board.Height + Radius + Ball_Board;
 		double SpeedX = SPEEDX,SpeedY = SPEEDY,SpeedXUp=1.2,SpeedYUp=1.2,SpeedXDown=0.8,SpeedYDown=0.8, dirX, dirY;
 	} Ball;
@@ -757,7 +757,7 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Fast_Mode:
-							if (abs(Ball.dirY) < 13)
+							if (abs(Ball.dirY) < 20)
 							{
 								Ball.dirY *= Ball.SpeedYUp;
 								Ball.SpeedY*= Ball.SpeedYUp;
