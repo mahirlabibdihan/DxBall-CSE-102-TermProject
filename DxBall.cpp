@@ -367,6 +367,7 @@
 	int level=10;
 	int main()
 	{
+		srand(time(NULL));
 		iReset();
 		iSetTimer(0, iBallMove);
 		Initialize(ScreenWidth, ScreenHeight, "Dxball");
