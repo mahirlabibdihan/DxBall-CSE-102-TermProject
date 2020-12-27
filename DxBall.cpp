@@ -32,6 +32,7 @@
 	#define Explode_Mode 15
 	#define ReloadBullet 10
 	#define max(a,b) (a>b?a:b)
+	#define min(a,b) (a<b?a:b)
 	#define BLOCK 1
 	#define BOMB 2
 	#define BRICK (-1*BLOCK)
@@ -305,6 +306,7 @@
 		char *MouseClick="Data\\Music\\Button2.wav";
 		char *Reload="Data\\Music\\Reload.wav";
 		char *Gun="Data\\Music\\Gun.wav";
+		char *CatchItem="Data\\Music\\CatchItem.wav";
 	} Sound;
 	struct
 	{
@@ -722,10 +724,12 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Life_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							GameState.Life++;
 							DropItems.Table[i][j] = 0;
 							break;
 						case Extend_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							if (Board.WIDTH + Board.Extension <= ScreenWidth - 2 * Wall.X)
 							{
 
@@ -744,6 +748,7 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Shrink_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							if (Board.Width - Board.Compression >= Board.MinWidth)
 							{
 								glutWarpPointer(Mouse.X+ Board.Compression/2,ScreenHeight/2);
@@ -758,6 +763,7 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Fast_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							if (abs(Ball.dirY) < 20)
 							{
 								Ball.dirY *= Ball.SpeedYUp;
@@ -768,6 +774,7 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Slow_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							if (abs(Ball.dirY) > 0)
 							{
 								Ball.dirY *= Ball.SpeedYDown;
@@ -788,6 +795,7 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Fall_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							if(Wall.Y>2*BlockHeight)
 							{
 								Wall.Y -= BlockHeight;
@@ -795,30 +803,52 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Grab_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							Board.Grab = 1;
 							DropItems.Table[i][j] = 0;
 							break;
 						case Fire_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							Ball.Fire = 1;
 							DropItems.Table[i][j] = 0;
 							break;
 						case Big_Mode:
-							Ball.Radius = Ball.RADIUS * 1.5;
-							if(!GameState.Launch)
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
+							if(Ball.Radius==Ball.RADIUS)
 							{
-								Ball.Y=Board.Y+Board.Height+ Ball_Board+Ball.Radius;
+								Ball.Radius = Ball.RADIUS * 1.5;
+								Ball.dirY *= 1.2;
+								Ball.SpeedY*=1.2;
+								Ball.dirX *= 1.2;
+								Ball.SpeedX*=1.2;
+								if(!GameState.Launch)
+								{
+									Ball.Y=Board.Y+Board.Height+ Ball_Board+Ball.Radius;
+
+								}
 							}
+							
 							DropItems.Table[i][j] = 0;
 							break;
 						case Small_Mode:
-							Ball.Radius = Ball.RADIUS * 0.5;
-							if(!GameState.Launch)
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);		
+							if(Ball.Radius==Ball.RADIUS)
 							{
-								Ball.Y=Board.Y+Board.Height+ Ball_Board+Ball.Radius;
+								Ball.Radius = Ball.RADIUS * 0.6;
+								Ball.dirY *= .8;
+								Ball.SpeedY*=.8;
+								Ball.dirX *= .8;
+								Ball.SpeedX*=.8;
+								if(!GameState.Launch)
+								{
+									Ball.Y=Board.Y+Board.Height+ Ball_Board+Ball.Radius;
+								}
 							}
+
 							DropItems.Table[i][j] = 0;
 							break;
 						case SuperShrink_Mode:
+							PlaySound(Sound.CatchItem, NULL,SND_ASYNC);
 							glutWarpPointer(Mouse.X+(Board.Width-Board.MinWidth)/2,ScreenHeight/2);
 							Board.X+=(Board.Width-Board.MinWidth)/2;
 							Board.Width = Board.MinWidth;
@@ -830,6 +860,7 @@
 							DropItems.Table[i][j] = 0;
 							break;
 						case Explode_Mode:
+
 							{
 								int i,j;
 								for (i = 0; i < TotalC; i++)
@@ -933,7 +964,7 @@
 			PlaySoundA(Sound.BallXBoard, NULL, SND_ASYNC);
 			if(Ball.X != Board.X + Board.Width / 2)
 			{
-				Ball.dirX = ceil((Ball.X - Board.X - Board.Width / 2) * Ball.SpeedX * 11 / Board.Width);
+				Ball.dirX = ceil((Ball.X - Board.X - Board.Width / 2) * Ball.SpeedX * max(min(12,Ball.Radius),8) / Board.Width);
 			}
 			while(!Ball.dirX)
 			{
@@ -1041,18 +1072,40 @@
 	}
 	void iDrawBomb(int x, int y)
 	{
-		iSetColor(255, 127, 0);
-		iFilledRectangle(x, y, BlockWidth, BlockHeight);
-		iSetColor(247, 147, 47);
-		iFilledRectangle(x + 3, y + 3, BlockWidth - 6, BlockHeight - 6);
-		iSetColor(243, 171, 95);
-		iFilledRectangle(x + 6, y + 6, BlockWidth - 12, BlockHeight - 12);
-		iSetColor(239, 191, 143);
-		iFilledRectangle(x + 9, y + 9, BlockWidth - 18, BlockHeight - 18);
-		iSetColor(235, 211, 187);
-		iFilledRectangle(x + 12, y + 12, BlockWidth - 24, BlockHeight - 24);
-		iSetColor(231, 231, 231);
-		iFilledRectangle(x + 15, y + 15, BlockWidth - 30, BlockHeight - 30);
+		if((GameState.Time/10)%2)
+		{
+			iSetColor(255, 127, 0);
+			iFilledRectangle(x, y, BlockWidth, BlockHeight);
+			iSetColor(247, 147, 47);
+			iFilledRectangle(x + 3, y + 3, BlockWidth - 6, BlockHeight - 6);
+			iSetColor(243, 171, 95);
+			iFilledRectangle(x + 6, y + 6, BlockWidth - 12, BlockHeight - 12);
+			iSetColor(239, 191, 143);
+			iFilledRectangle(x + 9, y + 9, BlockWidth - 18, BlockHeight - 18);
+			iSetColor(235, 211, 187);
+			iFilledRectangle(x + 12, y + 12, BlockWidth - 24, BlockHeight - 24);
+			iSetColor(231, 231, 231);
+			iFilledRectangle(x + 15, y + 15, BlockWidth - 30, BlockHeight - 30);
+		}
+		else
+		{
+			iSetColor(231, 231, 231);
+			iFilledRectangle(x, y, BlockWidth, BlockHeight);
+			iSetColor(235, 211, 187);
+			iFilledRectangle(x + 3, y + 3, BlockWidth - 6, BlockHeight - 6);
+			iSetColor(239, 191, 143);
+			iFilledRectangle(x + 6, y + 6, BlockWidth - 12, BlockHeight - 12);
+			iSetColor(239, 191, 143);
+			iSetColor(243, 171, 95);
+			iFilledRectangle(x + 9, y + 9, BlockWidth - 18, BlockHeight - 18);
+			
+			iSetColor(247, 147, 47);
+			iFilledRectangle(x + 12, y + 12, BlockWidth - 24, BlockHeight - 24);
+			iSetColor(255, 127, 0);
+			iFilledRectangle(x + 15, y + 15, BlockWidth - 30, BlockHeight - 30);
+		}
+		
+
 		iSetColor(5, 5, 5);
 		iRectangle(x, y, BlockWidth, BlockHeight);
 	}
@@ -2239,9 +2292,9 @@
 			Collide = BLOCK;
 			GameState.Remaining--;
 			GameState.Score += 10;
-			if (Block[i][j].Type)
+			// if (Block[i][j].Type)
 			{
-				DropItems.Table[Wall.Y + i * BlockHeight][Wall.X + j * BlockWidth] = Block[i][j].Type;
+				DropItems.Table[Wall.Y + i * BlockHeight][Wall.X + j * BlockWidth] = rand()%16;//Block[i][j].Type;
 			}
 		}
 		else if(Block[i][j].Strength == BRICK)
