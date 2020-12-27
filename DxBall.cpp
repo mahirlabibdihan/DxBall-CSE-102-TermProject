@@ -626,7 +626,8 @@
 	}
 	void iDeath()
 	{
-		if (GameState.Life == 0)
+		
+		if (GameState.Life == 1)
 		{
 			if(GameState.Level==0)
 			{
@@ -641,8 +642,8 @@
 		{
 			iSaveState();
 		}
-		GameState.Launch = 0;
 		GameState.Life--;
+		GameState.Launch = 0;	
 		Board.Width=Board.WIDTH;
 		Board.Grab=0;
 		Board.Gun=0;
@@ -2077,7 +2078,11 @@
 
 		else if (key == 'q')
 		{
-			if (MODE == Game.Mode) iSaveState();
+			if (MODE == Game.Mode) 
+				{
+					if(!Custom.Win&&!Custom.GameOver)
+					iSaveState();
+				}
 			MODE = Quit.Mode;
 		}
 
@@ -2162,18 +2167,6 @@
 						if(Board.Bullets==0) Board.Gun=0;
 					}
 				}
-			}
-		}
-		else if(key=='x')
-		{
-			if (MODE)
-			{
-				if (MODE == Game.Mode)
-				{
-					iSaveState();
-				}
-				iReset();
-				MODE = Menu.Mode;
 			}
 		}
 	}
