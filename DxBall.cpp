@@ -1,6 +1,15 @@
-/*------------------------------------------------------------------------------ D X    B A L L ----------------------------------------------------------------------------- */
+/*
+ ______   _________ _      _       _
+|  ____ \|___   ___| |    | |     | |
+| |    \ \   | |   | |____| |     | |
+| |    | |   | |   |  ____  |     | |
+| |____/ /___| |___| |    | |_____| |
+|_______/|_________|_|    |_________|
+M A H I R     L A B I B     D I H A N
 
-/*-------------------------------------------------------------------- M A H I R 	L A B I B 	 D I H A N ------------------------------------------------------------------ */
+*/
+
+/*------------------------------------------------------------------------------ D X    B A L L ----------------------------------------------------------------------------- */
 
 # include "iGraphics.h"
 
@@ -353,7 +362,7 @@
 		char *BlockType="Data\\BlockType.txt";
 		char *HighScore="Data\\HighScore.txt";
 		char *LastState="Data\\LastState.txt";
-	} Text;
+	} Text; 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -371,7 +380,7 @@
 	{
 		srand(time(NULL));
 		iReset();
-		iSetTimer(0, iBallMove);
+		iSetTimer(0,iBallMove);
 		Initialize(ScreenWidth, ScreenHeight, "Dxball");
 		return 0;
 	}
@@ -626,6 +635,9 @@
 	}
 	void iDeath()
 	{
+
+		Ball.X = Board.X + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
+		GameState.Launch = 0;	
 		
 		if (GameState.Life == 1)
 		{
@@ -643,7 +655,7 @@
 			iSaveState();
 		}
 		GameState.Life--;
-		GameState.Launch = 0;	
+		
 		Board.Width=Board.WIDTH;
 		Board.Grab=0;
 		Board.Gun=0;
@@ -653,7 +665,6 @@
 		Ball.dirY=0;
 		Ball.Fire=0;
 		Ball.Radius=Ball.RADIUS;
-		Ball.X = Board.X + Board.Width / 2, Ball.Y = Board.Y + Board.Height + Ball.Radius + Ball_Board, Ball.dirX = 0, Ball.dirY = 0;
 		PlaySound(Sound.GameOver, NULL, SND_ASYNC);
 		iResetBullet();
 		iResetDropItems();

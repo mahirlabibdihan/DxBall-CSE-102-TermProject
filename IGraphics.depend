@@ -1,0 +1,100 @@
+# depslib dependency file v1.0
+1606734989 source:d:\igraphics-master\imain.cpp
+	"iGraphics.h"
+	<math.h>
+
+1606653562 d:\igraphics-master\igraphics.h
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"glut.h"
+	<time.h>
+	<math.h>
+	"glaux.h"
+
+1563940332 d:\igraphics-master\opengl\include\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1563940332 d:\igraphics-master\opengl\include\glaux.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1603028467 source:d:\igraphics-master\solarsystem.cpp
+	"iGraphics.h"
+	"gl.h"
+
+1563940332 d:\igraphics-master\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1563940332 d:\igraphics-master\glaux.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1563940332 d:\igraphics-master\gl.h
+
+1603023902 source:d:\igraphics-master\balldemo.cpp
+	"iGraphics.h"
+	"gl.h"
+
+1563940332 d:\igraphics-master\opengl\include\gl.h
+
+1603024171 source:d:\igraphics-master\watch.cpp
+	"iGraphics.h"
+	<math.h>
+	<time.h>
+
+1603025583 source:d:\igraphics-master\watchc.cpp
+	"iGraphics.h"
+	<math.h>
+	<time.h>
+
+1607521336 source:d:\dx-ball\dxball.cpp
+	"iGraphics.h"
+
+1606821393 d:\dx-ball\opengl\include\igraphics.h
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"glut.h"
+	<time.h>
+	<math.h>
+	"glaux.h"
+
+1563940332 d:\dx-ball\opengl\include\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1563940332 d:\dx-ball\opengl\include\glaux.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1610969469 source:d:\github\dxball\dxball.cpp
+	"iGraphics.h"
+
+1608755624 d:\github\dxball\opengl\include\igraphics.h
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"glut.h"
+	<time.h>
+	<math.h>
+	"glaux.h"
+
+1608755624 d:\github\dxball\opengl\include\glut.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1608755624 d:\github\dxball\opengl\include\glaux.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
