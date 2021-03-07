@@ -14,5 +14,8 @@ Made using iGraphics .
 # Custom Game
 <img src="DxballCustom.png" alt="Dxball" width="900"/>
 
+# Highscore
+<img src="DxballHighScore.png" alt="Dxball" width="900"/>
+
 # Gameover
 <img src="DxballGameOver.png" alt="Dxball" width="900"/>
